@@ -20,12 +20,16 @@
         "type": "woff",
         "location": {
           "latin": "/fonts/OpenSans-Regular-latin.woff",
+          "cyrillic": "/fonts/OpenSans-Regular-cyrillic.woff",
           "extended": "/fonts/OpenSans-Regular-extended.woff"
         }
       },
       {
         "type": "truetype",
-        "location": "/fonts/OpenSans-Regular.ttf"
+        "location": {
+          "latin": "/fonts/OpenSans-Regular-latin.ttf",
+          "extended": "/fonts/OpenSans-Regular-extended.ttf"
+        }
       }
       ]
   } 

@@ -2,6 +2,8 @@
   "en":    "latin",
   "en-UK": "latin",
   "es":    "latin",
-  "it-ch": "extended"
+  "it-ch": "extended",
+  "ru":    "cyrillic",
+  "jp":    "japanese"
 }
 
