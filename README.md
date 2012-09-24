@@ -9,10 +9,7 @@ const css_generator = require("node-font-face-generator");
 
 2. Set up your configuration.
 Two configuration items are needed for the css_generator, `fonts` and
-`language_to_locations`.
-
-`fonts` is an Object that holds a dictionary of fonts.
-
+`language_to_locations`. `fonts` is an Object that holds a dictionary of fonts.
 ```
 font_config = {
   "OpenSansRegular": {
@@ -45,15 +42,12 @@ font_config = {
   }
 };
 ```
-
 Multiple locations can be defined for a single font. This is useful to define
 specific font files for different language "roots". For example, latin based
 languages can be specified under the "latin" location, russian under
 "cyrillic", and greek under "greek". If multiple locations are defined, `extended` *must* be defined. `extended` is the default if a language is not found in the `language_to_locations` table.
-
 `language_to_locations` is an object that holds a dictionary of languages to
 default locations. For example:
-
 ```
 language_to_locations = {
   "en":    "latin",   // will match for en, en-US, en-UK, en-CA, ...
@@ -65,7 +59,6 @@ language_to_locations = {
   "jp":    "japanese"
 };
 ```
-
 If an exact match is not found for a country specific language, the language's root will be used. If a language's location is not found for a multi-location font, `extended` will be used.
 
 3. Call the `setup` function with the configuration objects.
@@ -76,12 +69,26 @@ css_generator.setup({
 });
 ```
 
-4. When CSS for a custom font-face is needed, call `get_font_face`
+4. When CSS for a custom font-face is needed, call `get_font_css` with the
+   configuration and a callback. The callback follows node convention and will
+   be called with two parameters when complete. The first parameter is any
+   error that is thrown (or null), the second is the CSS (or null).
 ```
 var css = css_generator.get_font_css({
   ua: getUserAgent(),
   lang: languageToUser(),
   fonts: ["OpenSansRegular"]
+}, function(err, css) {
+  if (err) {
+    // handle the error
+    ...
+  }
+  else if (css) {
+    // do something with the CSS
+  }
+  else {
+    // this should never ever happen
+  }
 });
 ```
 
