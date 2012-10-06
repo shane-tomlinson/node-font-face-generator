@@ -20,6 +20,78 @@ function getLanguageToLocationsConfig() {
   return loadJSON(__dirname + "/sample-config/language-to-location.json");
 }
 
+function setup(cb) {
+  css_generator.setup({
+    fonts: getFontConfig(),
+    language_to_locations: getLanguageToLocationsConfig(),
+    url_modifier: function(url) { return "/inserted_sha" + url; }
+  });
+  cb();
+}
+
+function testFontConfigContains(test, ua, lang, types, done) {
+  function searchForType(formats, type) {
+    for(var i=0, format; format=formats[i]; ++i) {
+      if(format.type === type) return i;
+    }
+    return -1;
+  }
+
+  var fontConfigs = css_generator.get_font_configs({
+    ua: ua,
+    lang: lang,
+    fonts: ["OpenSansRegular"]
+  }, function(err, fontConfigs) {
+    test.equal(err, null, "no error expected");
+
+    var openSansFontConfig = fontConfigs[0];
+    var formats = openSansFontConfig.formats;
+
+    types.forEach(function(type) {
+      test.ok(searchForType(formats, type) > -1, type + " found in formats");
+    });
+
+    test.done();
+  });
+}
+
+function testFontConfigs(test, browsers, types, index) {
+  index = index || 0;
+  var browser = browsers[index];
+  if (browser) {
+    testFontConfigContains(test, browser, "en", types,
+      testFontConfigs.bind(null, test, browsers, types, index + 1));
+  }
+  else {
+    test.done();
+  }
+}
+
+exports.get_font_configs = nodeunit.testCase({
+  setUp: setup,
+
+  "en/Firefox, Safari, Chrome maps to woff/latin": function(test) {
+    var UAs = ["Firefox", "Safari", "Chrome"];
+    var types = ["woff", "local"];
+
+    testFontConfigs(test, UAs, types);
+  },
+
+  "en/MSIE 8.0, MSIE 9.0, Opera map to embedded-opentype/latin": function(test) {
+    var UAs = ["MSIE 8.0", "MSIE 9.0", "Opera"];
+    var types = ["embedded-opentype", "local"];
+
+    testFontConfigs(test, UAs, types);
+  },
+
+  "en/iOS maps to truetype/latin": function(test) {
+    var UAs = ["iOS"];
+    var types = ["truetype", "local"];
+
+    testFontConfigs(test, UAs, types);
+  }
+});
+
 function testCSSContains(test, ua, lang, types, done) {
   css_generator.get_font_css({
     ua: ua,
@@ -34,16 +106,20 @@ function testCSSContains(test, ua, lang, types, done) {
   });
 }
 
-function setup(cb) {
-  css_generator.setup({
-    fonts: getFontConfig(),
-    language_to_locations: getLanguageToLocationsConfig(),
-    url_modifier: function(url) { return "/inserted_sha" + url; }
-  });
-  cb();
+function testCSSs(test, UAs, types, index) {
+  index = index || 0;
+
+  var ua = UAs[index];
+  if (ua) {
+    testCSSContains(test, ua, "en", types,
+      testCSSs.bind(null, test, UAs, types, index + 1));
+  }
+  else {
+    test.done();
+  }
 }
 
-exports.test_css_generated = nodeunit.testCase({
+exports.get_font_css = nodeunit.testCase({
   setUp: setup,
 
   "en maps to latin": function(test) {
@@ -68,26 +144,22 @@ exports.test_css_generated = nodeunit.testCase({
   },
 
   "Firefox, Chrome and Safari all support local and .woff files": function(test) {
-    testCSSContains(test, "Firefox", "en", ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.woff"],
-      function() {
-        testCSSContains(test, "Chrome", "en", ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.woff"],
-          function() {
-            testCSSContains(test, "Safari", "en", ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.woff"],
-              test.done);
-          });
-    });
+    var UAs = ["Firefox", "Safari", "Chrome"];
+    var types = ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.woff"];
+
+    testCSSs(test, UAs, types);
   },
 
   "IE and Opera support local and .eot files": function(test) {
-    testCSSContains(test, "MSIE 8.0", "en", ["local", "/inserted_sha/fonts/OpenSans-Regular.eot"], function() {
-      testCSSContains(test, "MSIE 9.0", "en", ["local", "/inserted_sha/fonts/OpenSans-Regular.eot"], function() {
-        testCSSContains(test, "Opera", "en", ["local", "/inserted_sha/fonts/OpenSans-Regular.eot"], test.done);
-      });
-    });
+    var UAs = ["MSIE 8.0", "MSIE 9.0", "Opera"];
+    var types = ["local", "/inserted_sha/fonts/OpenSans-Regular.eot"];
+    testCSSs(test, UAs, types);
   },
 
   "iOS supports local and ttf files": function(test) {
-    testCSSContains(test, "iOS", "en", ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.ttf"], test.done);
+    var UAs = ["iOS"];
+    var types = ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.ttf"];
+    testCSSs(test, UAs, types);
   }
 });
 
