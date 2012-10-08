@@ -55,12 +55,11 @@ function testFontConfigContains(test, ua, lang, types, done) {
   });
 }
 
-function testFontConfigs(test, browsers, types, index) {
-  index = index || 0;
-  var browser = browsers[index];
+function testFontConfigs(test, UAs, types) {
+  var browser = UAs.shift();
   if (browser) {
     testFontConfigContains(test, browser, "en", types,
-      testFontConfigs.bind(null, test, browsers, types, index + 1));
+      testFontConfigs.bind(null, test, UAs, types));
   }
   else {
     test.done();
@@ -102,7 +101,8 @@ function testCSSContains(test, ua, lang, types, done) {
       test.notEqual(css.indexOf(type), -1, type + " found");
     });
 
-    done();
+    if (done) done();
+    else test.done();
   });
 }
 
@@ -123,24 +123,24 @@ exports.get_font_css = nodeunit.testCase({
   setUp: setup,
 
   "en maps to latin": function(test) {
-    testCSSContains(test, "Firefox", "en", ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"], test.done);
+    testCSSContains(test, "Firefox", "en", ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"]);
   },
 
   "it-ch maps to extended": function(test) {
-    testCSSContains(test, "Firefox", "it-ch", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"], test.done);
+    testCSSContains(test, "Firefox", "it-ch", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
   },
 
   "ru maps to cyrillic": function(test) {
-    testCSSContains(test, "Firefox", "ru", ["/inserted_sha/fonts/OpenSans-Regular-cyrillic.woff"], test.done);
+    testCSSContains(test, "Firefox", "ru", ["/inserted_sha/fonts/OpenSans-Regular-cyrillic.woff"]);
   },
 
   "unknown languages default to the extended font set": function(test) {
-    testCSSContains(test, "Firefox", "cz", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"], test.done);
+    testCSSContains(test, "Firefox", "cz", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
   },
 
   "missing font location falls back to extended": function(test) {
     // jp should use japanese which has no location defined
-    testCSSContains(test, "Firefox", "jp", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"], test.done);
+    testCSSContains(test, "Firefox", "jp", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
   },
 
   "Firefox, Chrome and Safari all support local and .woff files": function(test) {
@@ -163,41 +163,69 @@ exports.get_font_css = nodeunit.testCase({
   }
 });
 
-function testMissingConfig(test, filter_item, done) {
+function testMissingConfig(test, filter_item, funcName, done) {
   var config = {
     ua: "Firefox",
     lang: "en",
     fonts: ["OpenSansRegular"]
   };
-  delete config[filter_item];
 
-  css_generator.get_font_css(config, function(err, css) {
+  if (filter_item) delete config[filter_item];
+
+  css_generator[funcName](config, function(err, css) {
     test.ok(err instanceof MissingConfigError, "Correct error type");
-    done();
+
+    if (done) done();
+    else test.done();
+  });
+}
+
+function testMissingConfigs(test, funcName) {
+  testMissingConfig(test, "ua", funcName, function() {
+    testMissingConfig(test, "lang", funcName, function() {
+      testMissingConfig(test, "fonts", funcName);
+    });
+  });
+}
+
+function testInvalidFont(test, funcName) {
+  css_generator[funcName]({
+    ua: "Firefox",
+    lang: "en",
+    fonts: ["UnknownFont"]
+  }, function(err, css) {
+    test.ok(err instanceof InvalidFontError, "Invalid Font Error");
+    test.equal(err.message, "UnknownFont");
+    test.done();
   });
 }
 
 exports.expected_errors = nodeunit.testCase({
   setUp: setup,
 
-  "missing configuration options throw MissingConfigError": function(test) {
-    testMissingConfig(test, "ua", function() {
-      testMissingConfig(test, "lang", function() {
-        testMissingConfig(test, "fonts", test.done);
-      });
-    });
+  "setup not called before get_font_css": function(test) {
+    css_generator.reset();
+    testMissingConfig(test, null, "get_font_css");
   },
 
-  "invalid font returns with InvalidFontError": function(test) {
-    css_generator.get_font_css({
-      ua: "Firefox",
-      lang: "en",
-      fonts: ["UnknownFont"]
-    }, function(err, css) {
-      test.ok(err instanceof InvalidFontError, "Invalid Font Error");
-      test.equal(err.message, "UnknownFont");
-      test.done();
-    });
-  }
+  "setup not called before get_font_configs": function(test) {
+    css_generator.reset();
+    testMissingConfig(test, null, "get_font_configs");
+  },
 
+  "missing configuration options throw MissingConfigError for get_font_css": function(test) {
+    testMissingConfigs(test, "get_font_css");
+  },
+
+  "missing configuration options throw MissingConfigError for get_font_configs": function(test) {
+    testMissingConfigs(test, "get_font_configs");
+  },
+
+  "InvalidFontError for get_font_css": function(test) {
+    testInvalidFont(test, "get_font_css");
+  },
+
+  "InvalidFontError for get_font_configs": function(test) {
+    testInvalidFont(test, "get_font_configs");
+  }
 });
