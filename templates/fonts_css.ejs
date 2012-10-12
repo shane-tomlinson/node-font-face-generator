@@ -3,6 +3,9 @@
   font-family: '<%= font.fontFamily %>';
   font-style: <%= font.fontStyle %>;
   font-weight: <%= font.fontWeight %>;
-  <% var total = font.formats.length; font.formats.forEach(function(format, index) { if(format.type === "embedded-opentype") { %>src: url('<%= urlModifier(format.location) %>'); <% } }) %>src: <% font.formats.forEach(function(format, index) { if(index !== 0) { %><% } if(format.type === "local") { %>local('<%= format.location %>')<%= index === (total - 1) ? ";\n" : "," %> <% } else { %>url('<%= urlModifier(format.location) %>') format('<%= format.type %>')<%= index === (total - 1) ? ";\n" : "," %><% } }); %>}
+  <% var total = font.formats.length; font.formats.forEach(function(format,
+  index) { if(format.type === "embedded-opentype") { %>src: url('<%= urlModifier(format.location) %>');
+  <% } }) %>src: <% font.formats.forEach(function(format, index) { if(index !==
+  0) { %><% } if(format.type === "local") { %>local('<%= format.location %>')<%= index === (total - 1) ? ";\n" : ",\n      " %> <% } else { %>url('<%= urlModifier(format.location) %><%= format.type === "embedded-opentype" ? "#" : "" %>') format('<%= format.type %>')<%= index === (total - 1) ? ";\n" : ",\n       " %><% } }); %>}
 <% }) %>
 

@@ -92,7 +92,29 @@ var css = css_generator.get_font_css({
 });
 ```
 
-5. Do what you will with the CSS. Write it out to a .CSS file in a build script or handle it in an HTTP request.
+5. It is possible to generate one @font-face with declarations for all
+   browsers using `ua: 'all'`. This is useful if you want to create one total
+   CSS bundle per language, but not per browser.
+```
+var css = css_generator.get_font_css({
+  ua: 'all',
+  lang: languageToUser(),
+  fonts: ["OpenSansRegular"]
+}, function(err, css) {
+  if (err) {
+    // handle the error
+    ...
+  }
+  else if (css) {
+    // This will be the css with fonts declared for all browsers.
+  }
+  else {
+    // this should never ever happen
+  }
+});
+```
+
+6. Do what you will with the CSS. Write it out to a .CSS file in a build script or handle it in an HTTP request.
 
 ## Author:
 * Shane Tomlinson

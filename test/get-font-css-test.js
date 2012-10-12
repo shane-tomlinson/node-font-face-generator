@@ -51,7 +51,7 @@ function testFontConfigContains(test, ua, lang, types, done) {
       test.ok(searchForType(formats, type) > -1, type + " found in formats");
     });
 
-    test.done();
+    done();
   });
 }
 
@@ -69,23 +69,30 @@ function testFontConfigs(test, UAs, types) {
 exports.get_font_configs = nodeunit.testCase({
   setUp: setup,
 
-  "en/Firefox, Safari, Chrome maps to woff/latin": function(test) {
-    var UAs = ["Firefox", "Safari", "Chrome"];
+  "en/Firefox >= 3.6, Safari >= 5.1, Chrome >= 5.0, IE >= 9.0 Opera >= 11.10 maps to woff/latin": function(test) {
+    var UAs = ["Firefox/3.6", "Version/5.1 Safari/", "Chrome/5.0", "Opera/9.80 Version/11.10", "MSIE 9.0", "MSIE 10.0"];
     var types = ["woff", "local"];
 
     testFontConfigs(test, UAs, types);
   },
 
-  "en/MSIE 8.0, MSIE 9.0, Opera map to embedded-opentype/latin": function(test) {
-    var UAs = ["MSIE 8.0", "MSIE 9.0", "Opera"];
+  "en/MSIE 8.0, MSIE 9.0, map to embedded-opentype, local/latin": function(test) {
+    var UAs = ["MSIE 8.0", "MSIE 9.0"];
     var types = ["embedded-opentype", "local"];
 
     testFontConfigs(test, UAs, types);
   },
 
-  "en/iOS maps to truetype/latin": function(test) {
-    var UAs = ["iOS"];
-    var types = ["truetype", "local"];
+  "en/iOS, Safari >= 3.1, Opera >= 10.0, Firefox >= 3.5, Chrome >= 4, IE >= 9.0 maps to truetype/latin": function(test) {
+    var UAs = ["iPhone OS 2_0 Version/2.0", "Version/3.1 Safari/", "Opera/9.80 Version/10.0", "Firefox/3.5", "Chrome/4.0", "MSIE 9.0"];
+    var types = ["truetype"];
+
+    testFontConfigs(test, UAs, types);
+  },
+
+  "en/all maps to all fonts": function(test) {
+    var UAs = ["all"];
+    var types = ["local", "truetype", "embedded-opentype", "woff"];
 
     testFontConfigs(test, UAs, types);
   }
@@ -123,49 +130,57 @@ exports.get_font_css = nodeunit.testCase({
   setUp: setup,
 
   "en maps to latin": function(test) {
-    testCSSContains(test, "Firefox", "en", ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"]);
+    testCSSContains(test, "Firefox/4.0", "en", ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"]);
   },
 
   "it-ch maps to extended": function(test) {
-    testCSSContains(test, "Firefox", "it-ch", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
+    testCSSContains(test, "Firefox/4.0", "it-ch", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
   },
 
   "ru maps to cyrillic": function(test) {
-    testCSSContains(test, "Firefox", "ru", ["/inserted_sha/fonts/OpenSans-Regular-cyrillic.woff"]);
+    testCSSContains(test, "Firefox/4.0", "ru", ["/inserted_sha/fonts/OpenSans-Regular-cyrillic.woff"]);
   },
 
   "unknown languages default to the extended font set": function(test) {
-    testCSSContains(test, "Firefox", "cz", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
+    testCSSContains(test, "Firefox/4.0", "cz", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
   },
 
   "missing font location falls back to extended": function(test) {
     // jp should use japanese which has no location defined
-    testCSSContains(test, "Firefox", "jp", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
+    testCSSContains(test, "Firefox/4.0", "jp", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
   },
 
-  "Firefox, Chrome and Safari all support local and .woff files": function(test) {
-    var UAs = ["Firefox", "Safari", "Chrome"];
+  "Firefox >= 3.6, Chrome > 5.0, Safari > 5.1, Opera >= 11.10 all support local and .woff files": function(test) {
+    var UAs = ["Firefox/4.0", "Version/5.1 Safari/", "Chrome/5.0", "Opera/9.80 Version/11.10"];
     var types = ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.woff"];
 
     testCSSs(test, UAs, types);
   },
 
-  "IE and Opera support local and .eot files": function(test) {
-    var UAs = ["MSIE 8.0", "MSIE 9.0", "Opera"];
+  "IE supports local and eot files": function(test) {
+    var UAs = ["MSIE 8.0", "MSIE 9.0"];
     var types = ["local", "/inserted_sha/fonts/OpenSans-Regular.eot"];
     testCSSs(test, UAs, types);
   },
 
-  "iOS supports local and ttf files": function(test) {
-    var UAs = ["iOS"];
+  "iOS, Safari < 5.1, IE >= 9.0 supports local and ttf files": function(test) {
+    var UAs = ["iPhone OS 2_0 Version/2.0", "Version/5.0 Safari/", "MSIE 9.0"];
     var types = ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.ttf"];
+    testCSSs(test, UAs, types);
+  },
+
+  "all supports local, ttf, eot and woff files": function(test) {
+    var UAs = ["all"];
+    var types = ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.ttf",
+                          "/inserted_sha/fonts/OpenSans-Regular.eot",
+                          "/inserted_sha/fonts/OpenSans-Regular-latin.woff"];
     testCSSs(test, UAs, types);
   }
 });
 
 function testMissingConfig(test, filter_item, funcName, done) {
   var config = {
-    ua: "Firefox",
+    ua: "Firefox/4.0",
     lang: "en",
     fonts: ["OpenSansRegular"]
   };
@@ -190,7 +205,7 @@ function testMissingConfigs(test, funcName) {
 
 function testInvalidFont(test, funcName) {
   css_generator[funcName]({
-    ua: "Firefox",
+    ua: "Firefox/4.0",
     lang: "en",
     fonts: ["UnknownFont"]
   }, function(err, css) {

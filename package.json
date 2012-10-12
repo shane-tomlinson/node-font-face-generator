@@ -12,12 +12,13 @@
     "url": "https://github.com/shane-tomlinson/node-font-face-generator/issues"
   },
   "main": "index",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "engines": {
     "node": ">= 0.4.7"
   },
   "dependencies": {
-    "ejs": ">=0.6.1"
+    "ejs": ">=0.6.1",
+    "ua-parser": "0.2.4"
   },
   "devDependencies": {
     "nodeunit": ">=0.6.4"
