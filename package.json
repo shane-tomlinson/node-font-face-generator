@@ -12,7 +12,7 @@
     "url": "https://github.com/shane-tomlinson/node-font-face-generator/issues"
   },
   "main": "index",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "node": ">= 0.4.7"
   },

@@ -105,7 +105,7 @@ function testCSSContains(test, ua, locale, types, done) {
     fonts: ["OpenSansRegular"]
   }, function(err, css) {
     types.forEach(function(type) {
-      test.notEqual(css.indexOf(type), -1, type + " found");
+      test.notEqual(css.indexOf(type), -1, type + " not found for " + ua);
     });
 
     if (done) done();
@@ -165,15 +165,31 @@ exports.get_font_css = nodeunit.testCase({
 
   "iOS, Safari < 5.1, IE >= 9.0 supports local and ttf files": function(test) {
     var UAs = ["iPhone OS 2_0 Version/2.0", "Version/5.0 Safari/", "MSIE 9.0"];
-    var types = ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.ttf"];
+    var types = ["local",
+                 "/inserted_sha/fonts/OpenSans-Regular-latin.ttf"
+                 ];
     testCSSs(test, UAs, types);
   },
 
-  "all supports local, ttf, eot and woff files": function(test) {
+  "iOS >= 3.2, Safari >= 3.2, Chrome >= 4, Opera >= 9 support svg": function(test) {
+    var UAs = [
+        "iPhone OS 2_0 Version/3.2",
+        "Version/3.2 Safari/",
+        "Chrome/4.0",
+        "Opera/9.0",
+      ];
+    var types = [ "/inserted_sha/fonts/OpenSans-Regular.svg" ];
+    testCSSs(test, UAs, types);
+  },
+
+  "all supports local, ttf, eot, woff, and svg files": function(test) {
     var UAs = ["all"];
-    var types = ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.ttf",
-                          "/inserted_sha/fonts/OpenSans-Regular.eot",
-                          "/inserted_sha/fonts/OpenSans-Regular-latin.woff"];
+    var types = [ "local",
+                  "/inserted_sha/fonts/OpenSans-Regular-latin.ttf",
+                  "/inserted_sha/fonts/OpenSans-Regular.eot",
+                  "/inserted_sha/fonts/OpenSans-Regular-latin.woff",
+                  "/inserted_sha/fonts/OpenSans-Regular.svg"
+                ];
     testCSSs(test, UAs, types);
   }
 });

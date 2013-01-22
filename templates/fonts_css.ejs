@@ -6,6 +6,6 @@
   <% var total = font.formats.length; font.formats.forEach(function(format,
   index) { if(format.type === "embedded-opentype") { %>src: url('<%= urlModifier(format.url) %>');
   <% } }) %>src: <% font.formats.forEach(function(format, index) { if(index !==
-  0) { %><% } if(format.type === "local") { %>local('<%= format.url %>')<%= index === (total - 1) ? ";\n" : ",\n      " %> <% } else { %>url('<%= urlModifier(format.url) %><%= format.type === "embedded-opentype" ? "#" : "" %>') format('<%= format.type %>')<%= index === (total - 1) ? ";\n" : ",\n       " %><% } }); %>}
+  0) { %><% } if(format.type === "local") { %>local('<%= format.url %>')<%= index === (total - 1) ? ";\n" : ",\n      " %> <% } else { %>url('<%= urlModifier(format.url + (format.type === "svg" ? "#" + font.fontFamily : "")) %><%= format.type === "embedded-opentype" ? "#" : "" %>') format('<%= format.type %>')<%= index === (total - 1) ? ";\n" : ",\n       " %><% } }); %>}
 <% }) %>
 

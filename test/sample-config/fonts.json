@@ -30,6 +30,10 @@
           "latin": "/fonts/OpenSans-Regular-latin.ttf",
           "extended": "/fonts/OpenSans-Regular-extended.ttf"
         }
+      },
+      {
+        "type": "svg",
+        "url": "/fonts/OpenSans-Regular.svg"
       }
       ]
   } 
