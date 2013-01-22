@@ -16,20 +16,20 @@ function getFontConfig() {
   return loadJSON(__dirname + "/sample-config/fonts.json");
 }
 
-function getLanguageToLocationsConfig() {
-  return loadJSON(__dirname + "/sample-config/language-to-location.json");
+function getLocaleToURLKeys() {
+  return loadJSON(__dirname + "/sample-config/locale-to-url.json");
 }
 
 function setup(cb) {
   css_generator.setup({
     fonts: getFontConfig(),
-    language_to_locations: getLanguageToLocationsConfig(),
+    locale_to_url_keys: getLocaleToURLKeys(),
     url_modifier: function(url) { return "/inserted_sha" + url; }
   });
   cb();
 }
 
-function testFontConfigContains(test, ua, lang, types, done) {
+function testFontConfigContains(test, ua, locale, types, done) {
   function searchForType(formats, type) {
     for(var i=0, format; format=formats[i]; ++i) {
       if(format.type === type) return i;
@@ -39,7 +39,7 @@ function testFontConfigContains(test, ua, lang, types, done) {
 
   var fontConfigs = css_generator.get_font_configs({
     ua: ua,
-    lang: lang,
+    locale: locale,
     fonts: ["OpenSansRegular"]
   }, function(err, fontConfigs) {
     test.equal(err, null, "no error expected");
@@ -98,10 +98,10 @@ exports.get_font_configs = nodeunit.testCase({
   }
 });
 
-function testCSSContains(test, ua, lang, types, done) {
+function testCSSContains(test, ua, locale, types, done) {
   css_generator.get_font_css({
     ua: ua,
-    lang: lang,
+    locale: locale,
     fonts: ["OpenSansRegular"]
   }, function(err, css) {
     types.forEach(function(type) {
@@ -181,7 +181,7 @@ exports.get_font_css = nodeunit.testCase({
 function testMissingConfig(test, filter_item, funcName, done) {
   var config = {
     ua: "Firefox/4.0",
-    lang: "en",
+    locale: "en",
     fonts: ["OpenSansRegular"]
   };
 
@@ -197,7 +197,7 @@ function testMissingConfig(test, filter_item, funcName, done) {
 
 function testMissingConfigs(test, funcName) {
   testMissingConfig(test, "ua", funcName, function() {
-    testMissingConfig(test, "lang", funcName, function() {
+    testMissingConfig(test, "locale", funcName, function() {
       testMissingConfig(test, "fonts", funcName);
     });
   });
@@ -206,7 +206,7 @@ function testMissingConfigs(test, funcName) {
 function testInvalidFont(test, funcName) {
   css_generator[funcName]({
     ua: "Firefox/4.0",
-    lang: "en",
+    locale: "en",
     fonts: ["UnknownFont"]
   }, function(err, css) {
     test.ok(err instanceof InvalidFontError, "Invalid Font Error");

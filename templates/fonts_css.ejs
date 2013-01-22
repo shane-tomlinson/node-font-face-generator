@@ -4,8 +4,8 @@
   font-style: <%= font.fontStyle %>;
   font-weight: <%= font.fontWeight %>;
   <% var total = font.formats.length; font.formats.forEach(function(format,
-  index) { if(format.type === "embedded-opentype") { %>src: url('<%= urlModifier(format.location) %>');
+  index) { if(format.type === "embedded-opentype") { %>src: url('<%= urlModifier(format.url) %>');
   <% } }) %>src: <% font.formats.forEach(function(format, index) { if(index !==
-  0) { %><% } if(format.type === "local") { %>local('<%= format.location %>')<%= index === (total - 1) ? ";\n" : ",\n      " %> <% } else { %>url('<%= urlModifier(format.location) %><%= format.type === "embedded-opentype" ? "#" : "" %>') format('<%= format.type %>')<%= index === (total - 1) ? ";\n" : ",\n       " %><% } }); %>}
+  0) { %><% } if(format.type === "local") { %>local('<%= format.url %>')<%= index === (total - 1) ? ";\n" : ",\n      " %> <% } else { %>url('<%= urlModifier(format.url) %><%= format.type === "embedded-opentype" ? "#" : "" %>') format('<%= format.type %>')<%= index === (total - 1) ? ";\n" : ",\n       " %><% } }); %>}
 <% }) %>
 

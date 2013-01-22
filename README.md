@@ -1,5 +1,5 @@
 # node-font-face-generator
-A node module to generate language/browser dependent @font-face CSS declarations.
+A node module to generate localeuage/browser dependent @font-face CSS declarations.
 
 ## Usage
 1. Include node-font-face-generator in a node module.
@@ -9,7 +9,7 @@ const css_generator = require("node-font-face-generator");
 
 2. Set up your configuration.
 Two configuration items are needed for the css_generator, `fonts` and
-`language_to_locations`. `fonts` is an Object that holds a dictionary of fonts.
+`locale_to_url_keys`. `fonts` is an Object that holds a dictionary of fonts.
 ```
 font_config = {
   "OpenSansRegular": {
@@ -18,23 +18,23 @@ font_config = {
     "fontWeight": "400",
     "formats": [ {
         "type": "local",
-        "location": "Open Sans"
+        "url": "Open Sans"
       }, {
         "type": "local",
-        "location": "OpenSans"
+        "url": "OpenSans"
       }, {
         "type": "embedded-opentype",
-        "location": "/fonts/OpenSans-Regular.eot"
+        "url": "/fonts/OpenSans-Regular.eot"
       }, {
         "type": "woff",
-        "location": {
+        "url": {
           "latin": "/fonts/OpenSans-Regular-latin.woff",
           "cyrillic": "/fonts/OpenSans-Regular-cyrillic.woff",
           "extended": "/fonts/OpenSans-Regular-extended.woff"
         }
       }, {
         "type": "truetype",
-        "location": {
+        "url": {
           "latin": "/fonts/OpenSans-Regular-latin.ttf",
           "extended": "/fonts/OpenSans-Regular-extended.ttf"
         }
@@ -42,14 +42,13 @@ font_config = {
   }
 };
 ```
-Multiple locations can be defined for a single font. This is useful to define
-specific font files for different language "roots". For example, latin based
-languages can be specified under the "latin" location, russian under
-"cyrillic", and greek under "greek". If multiple locations are defined, `extended` *must* be defined. `extended` is the default if a language is not found in the `language_to_locations` table.
-`language_to_locations` is an object that holds a dictionary of languages to
-default locations. For example:
+Multiple urls can be defined for a single font. This is useful to define
+specific font files for different localeuage "roots". For example, latin based
+localeuages can be specified under the "latin" url, russian under
+"cyrillic", and greek under "greek". If multiple urls are defined, `extended` *must* be defined. `extended` is the default if a localeuage is not found in the `locale_to_url_keys` table.
+`locale_to_url_keys` is an object that holds a dictionary of locales to urls. For example:
 ```
-language_to_locations = {
+locale_to_url_keys = {
   "en":    "latin",   // will match for en, en-US, en-UK, en-CA, ...
   "es":    "latin",   // will match for es, es-MX, en-AR, en-*
   "fr"     "latin",
@@ -59,13 +58,13 @@ language_to_locations = {
   "jp":    "japanese"
 };
 ```
-If an exact match is not found for a country specific language, the language's root will be used. If a language's location is not found for a multi-location font, `extended` will be used.
+If an exact match is not found for a country specific localeuage, the localeuage's root will be used. If a localeuage's url is not found for a multi-url font, `extended` will be used.
 
 3. Call the `setup` function with the configuration objects.
 ```
 css_generator.setup({
   fonts: font_config,
-  language_to_locations: language_to_locations
+  locale_to_url_keys: locale_to_url_keys
 });
 ```
 
@@ -76,7 +75,7 @@ css_generator.setup({
 ```
 var css = css_generator.get_font_css({
   ua: getUserAgent(),
-  lang: languageToUser(),
+  locale: getUsersLocale(),
   fonts: ["OpenSansRegular"]
 }, function(err, css) {
   if (err) {
@@ -93,12 +92,12 @@ var css = css_generator.get_font_css({
 ```
 
 5. It is possible to generate one @font-face with declarations for all
-   browsers using `ua: 'all'`. This is useful if you want to create one total
-   CSS bundle per language, but not per browser.
+   browsers using `ua: 'all'`. This is useful to create CSS for inclusion
+   in a larger CSS file as part of a build script.
 ```
 var css = css_generator.get_font_css({
   ua: 'all',
-  lang: languageToUser(),
+  locale: getUsersLocale(),
   fonts: ["OpenSansRegular"]
 }, function(err, css) {
   if (err) {
