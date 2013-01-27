@@ -2,7 +2,7 @@
   "en":    "latin",
   "en-UK": "latin",
   "es":    "latin",
-  "it-ch": "extended",
+  "it-ch": "default",
   "ru":    "cyrillic",
   "jp":    "japanese"
 }

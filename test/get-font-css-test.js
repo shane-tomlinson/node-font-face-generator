@@ -104,6 +104,7 @@ function testCSSContains(test, ua, locale, types, done) {
     locale: locale,
     fonts: ["OpenSansRegular"]
   }, function(err, css) {
+    console.log(css);
     types.forEach(function(type) {
       test.notEqual(css.indexOf(type), -1, type + " not found for " + ua);
     });
@@ -133,21 +134,21 @@ exports.get_font_css = nodeunit.testCase({
     testCSSContains(test, "Firefox/4.0", "en", ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"]);
   },
 
-  "it-ch maps to extended": function(test) {
-    testCSSContains(test, "Firefox/4.0", "it-ch", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
+  "it-ch maps to default": function(test) {
+    testCSSContains(test, "Firefox/4.0", "it-ch", ["/inserted_sha/fonts/OpenSans-Regular-default.woff"]);
   },
 
   "ru maps to cyrillic": function(test) {
     testCSSContains(test, "Firefox/4.0", "ru", ["/inserted_sha/fonts/OpenSans-Regular-cyrillic.woff"]);
   },
 
-  "unknown languages default to the extended font set": function(test) {
-    testCSSContains(test, "Firefox/4.0", "cz", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
+  "unknown languages default to the default font set": function(test) {
+    testCSSContains(test, "Firefox/4.0", "cz", ["/inserted_sha/fonts/OpenSans-Regular-default.woff"]);
   },
 
-  "missing font location falls back to extended": function(test) {
+  "missing font location falls back to default": function(test) {
     // jp should use japanese which has no location defined
-    testCSSContains(test, "Firefox/4.0", "jp", ["/inserted_sha/fonts/OpenSans-Regular-extended.woff"]);
+    testCSSContains(test, "Firefox/4.0", "jp", ["/inserted_sha/fonts/OpenSans-Regular-default.woff"]);
   },
 
   "Firefox >= 3.6, Chrome > 5.0, Safari > 5.1, Opera >= 11.10 all support local and .woff files": function(test) {

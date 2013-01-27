@@ -21,14 +21,14 @@
         "url": {
           "latin": "/fonts/OpenSans-Regular-latin.woff",
           "cyrillic": "/fonts/OpenSans-Regular-cyrillic.woff",
-          "extended": "/fonts/OpenSans-Regular-extended.woff"
+          "default": "/fonts/OpenSans-Regular-default.woff"
         }
       },
       {
         "type": "truetype",
         "url": {
           "latin": "/fonts/OpenSans-Regular-latin.ttf",
-          "extended": "/fonts/OpenSans-Regular-extended.ttf"
+          "default": "/fonts/OpenSans-Regular-default.ttf"
         }
       },
       {

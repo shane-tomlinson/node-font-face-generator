@@ -30,13 +30,13 @@ font_config = {
         "url": {
           "latin": "/fonts/OpenSans-Regular-latin.woff",
           "cyrillic": "/fonts/OpenSans-Regular-cyrillic.woff",
-          "extended": "/fonts/OpenSans-Regular-extended.woff"
+          "default": "/fonts/OpenSans-Regular-default.woff"
         }
       }, {
         "type": "truetype",
         "url": {
           "latin": "/fonts/OpenSans-Regular-latin.ttf",
-          "extended": "/fonts/OpenSans-Regular-extended.ttf"
+          "default": "/fonts/OpenSans-Regular-default.ttf"
         }
       } ]
   }
@@ -45,7 +45,7 @@ font_config = {
 Multiple urls can be defined for a single font. This is useful to define
 specific font files for different localeuage "roots". For example, latin based
 localeuages can be specified under the "latin" url, russian under
-"cyrillic", and greek under "greek". If multiple urls are defined, `extended` *must* be defined. `extended` is the default if a localeuage is not found in the `locale_to_url_keys` table.
+"cyrillic", and greek under "greek". If multiple urls are defined, `default` *must* be defined. `default` is the default if a localeuage is not found in the `locale_to_url_keys` table.
 `locale_to_url_keys` is an object that holds a dictionary of locales to urls. For example:
 ```
 locale_to_url_keys = {
@@ -58,7 +58,7 @@ locale_to_url_keys = {
   "jp":    "japanese"
 };
 ```
-If an exact match is not found for a country specific localeuage, the localeuage's root will be used. If a localeuage's url is not found for a multi-url font, `extended` will be used.
+If an exact match is not found for a country specific localeuage, the localeuage's root will be used. If a locale's url is not found for a multi-url font, `default` will be used.
 
 3. Call the `setup` function with the configuration objects.
 ```
