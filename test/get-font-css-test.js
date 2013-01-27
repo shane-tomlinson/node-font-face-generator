@@ -20,11 +20,18 @@ function getLocaleToURLKeys() {
   return loadJSON(__dirname + "/sample-config/locale-to-url.json");
 }
 
-function setup(cb) {
+function setupWithLocaleToURLKeys(cb) {
   css_generator.setup({
     fonts: getFontConfig(),
     locale_to_url_keys: getLocaleToURLKeys(),
     url_modifier: function(url) { return "/inserted_sha" + url; }
+  });
+  cb();
+}
+
+function setupWithoutLocaleToURLKeys(cb) {
+  css_generator.setup({
+    fonts: getFontConfig()
   });
   cb();
 }
@@ -67,7 +74,7 @@ function testFontConfigs(test, UAs, types) {
 }
 
 exports.get_font_configs = nodeunit.testCase({
-  setUp: setup,
+  setUp: setupWithLocaleToURLKeys,
 
   "en/Firefox >= 3.6, Safari >= 5.1, Chrome >= 5.0, IE >= 9.0 Opera >= 11.10 maps to woff/latin": function(test) {
     var UAs = ["Firefox/3.6", "Version/5.1 Safari/", "Chrome/5.0", "Opera/9.80 Version/11.10", "MSIE 9.0", "MSIE 10.0"];
@@ -98,13 +105,13 @@ exports.get_font_configs = nodeunit.testCase({
   }
 });
 
+
 function testCSSContains(test, ua, locale, types, done) {
   css_generator.get_font_css({
     ua: ua,
     locale: locale,
     fonts: ["OpenSansRegular"]
   }, function(err, css) {
-    console.log(css);
     types.forEach(function(type) {
       test.notEqual(css.indexOf(type), -1, type + " not found for " + ua);
     });
@@ -127,8 +134,21 @@ function testCSSs(test, UAs, types, index) {
   }
 }
 
+exports.get_font_css_no_locale_to_url_keys = nodeunit.testCase({
+  setUp: setupWithoutLocaleToURLKeys,
+
+  "latin maps to latin": function(test) {
+    testCSSContains(test, "Firefox/4.0", "latin", ["/fonts/OpenSans-Regular-latin.woff"]);
+  },
+
+  "en maps to default": function(test) {
+    testCSSContains(test, "Firefox/4.0", "en", ["/fonts/OpenSans-Regular-default.woff"]);
+  }
+});
+
+
 exports.get_font_css = nodeunit.testCase({
-  setUp: setup,
+  setUp: setupWithLocaleToURLKeys,
 
   "en maps to latin": function(test) {
     testCSSContains(test, "Firefox/4.0", "en", ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"]);
@@ -233,7 +253,7 @@ function testInvalidFont(test, funcName) {
 }
 
 exports.expected_errors = nodeunit.testCase({
-  setUp: setup,
+  setUp: setupWithLocaleToURLKeys,
 
   "setup not called before get_font_css": function(test) {
     css_generator.reset();

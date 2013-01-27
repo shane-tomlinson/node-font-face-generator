@@ -1,5 +1,5 @@
 # node-font-face-generator
-A node module to generate localeuage/browser dependent @font-face CSS declarations.
+A node module to generate locale/browser dependent @font-face CSS declarations.
 
 ## Usage
 1. Include node-font-face-generator in a node module.
@@ -8,7 +8,7 @@ const css_generator = require("node-font-face-generator");
 ```
 
 2. Set up your configuration.
-Two configuration items are needed for the css_generator, `fonts` and
+Two configuration items are used for the css_generator, `fonts` and
 `locale_to_url_keys`. `fonts` is an Object that holds a dictionary of fonts.
 ```
 font_config = {
@@ -43,10 +43,10 @@ font_config = {
 };
 ```
 Multiple urls can be defined for a single font. This is useful to define
-specific font files for different localeuage "roots". For example, latin based
-localeuages can be specified under the "latin" url, russian under
-"cyrillic", and greek under "greek". If multiple urls are defined, `default` *must* be defined. `default` is the default if a localeuage is not found in the `locale_to_url_keys` table.
-`locale_to_url_keys` is an object that holds a dictionary of locales to urls. For example:
+specific font files for different locale "roots". For example, latin based
+locales can be specified under the "latin" url, russian under
+"cyrillic", and greek under "greek". If multiple urls are defined, `default` *must* be defined. `default` is the default if a locale is not found in the `locale_to_url_keys` table.
+`locale_to_url_keys` is an optional object that holds a dictionary of locales to urls. locale_to_url_keys kicks in if a locale cannot be directly found in the url list specified for a font. For example:
 ```
 locale_to_url_keys = {
   "en":    "latin",   // will match for en, en-US, en-UK, en-CA, ...
@@ -58,7 +58,7 @@ locale_to_url_keys = {
   "jp":    "japanese"
 };
 ```
-If an exact match is not found for a country specific localeuage, the localeuage's root will be used. If a locale's url is not found for a multi-url font, `default` will be used.
+If an exact match is not found for a specific locale, the locale's root will be used. If a locale's url is not found for a multi-url font, `default` will be used.
 
 3. Call the `setup` function with the configuration objects.
 ```
