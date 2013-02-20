@@ -19,6 +19,7 @@
       {
         "type": "woff",
         "url": {
+          "pt": "/fonts/OpenSans-Regular-pt.woff",
           "latin": "/fonts/OpenSans-Regular-latin.woff",
           "cyrillic": "/fonts/OpenSans-Regular-cyrillic.woff",
           "default": "/fonts/OpenSans-Regular-default.woff"
@@ -27,6 +28,7 @@
       {
         "type": "truetype",
         "url": {
+          "pt": "/fonts/OpenSans-Regular-pt.ttf",
           "latin": "/fonts/OpenSans-Regular-latin.ttf",
           "default": "/fonts/OpenSans-Regular-default.ttf"
         }

@@ -112,6 +112,8 @@ function testCSSContains(test, ua, locale, types, done) {
     locale: locale,
     fonts: ["OpenSansRegular"]
   }, function(err, css) {
+    test.equal(err, null);
+
     types.forEach(function(type) {
       test.notEqual(css.indexOf(type), -1, type + " not found for " + ua);
     });
@@ -146,13 +148,38 @@ exports.get_font_css_no_locale_to_url_keys = nodeunit.testCase({
   }
 });
 
-
 exports.get_font_css = nodeunit.testCase({
   setUp: setupWithLocaleToURLKeys,
 
   "en maps to latin": function(test) {
     testCSSContains(test, "Firefox/4.0", "en", ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"]);
   },
+
+  "en-UK maps to latin because en maps to latin": function(test) {
+    testCSSContains(test, "Firefox/4.0", "en-UK", ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"]);
+  },
+
+  // The next two tests make sure baseLocales defined that are aliased in
+  // locale-to-url are working correctly
+  "en_US maps to latin because en maps to latin": function(test) {
+    testCSSContains(test, "Firefox/4.0", "en_US", ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"]);
+  },
+
+  // pt is not aliased, it should find itself.
+  "pt maps to pt": function(test) {
+    testCSSContains(test, "Firefox/4.0", "pt", ["/inserted_sha/fonts/OpenSans-Regular-pt.woff"]);
+  },
+
+  // The next two tests make sure baseLocales that are not aliased are working
+  // correctly
+  "pt-BR maps to pt": function(test) {
+    testCSSContains(test, "Firefox/4.0", "pt-BR", ["/inserted_sha/fonts/OpenSans-Regular-pt.woff"]);
+  },
+
+  "pt_BR maps to pt": function(test) {
+    testCSSContains(test, "Firefox/4.0", "pt_BR", ["/inserted_sha/fonts/OpenSans-Regular-pt.woff"]);
+  },
+
 
   "it-ch maps to default": function(test) {
     testCSSContains(test, "Firefox/4.0", "it-ch", ["/inserted_sha/fonts/OpenSans-Regular-default.woff"]);
