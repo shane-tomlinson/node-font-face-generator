@@ -1,4 +1,5 @@
 var fs                 = require("fs"),
+    path               = require("path"),
     nodeunit           = require("nodeunit"),
     css_generator      = require("../lib/generate_css"),
     InvalidFontError   = css_generator.InvalidFontError,
@@ -13,11 +14,11 @@ function loadJSON(path) {
 }
 
 function getFontConfig() {
-  return loadJSON(__dirname + "/sample-config/fonts.json");
+  return loadJSON(path.join(__dirname, "sample-config", "fonts.json"));
 }
 
 function getLocaleToURLKeys() {
-  return loadJSON(__dirname + "/sample-config/locale-to-url.json");
+  return loadJSON(path.join(__dirname, "sample-config", "locale-to-url.json"));
 }
 
 function setupWithLocaleToURLKeys(cb) {
@@ -25,15 +26,13 @@ function setupWithLocaleToURLKeys(cb) {
     fonts: getFontConfig(),
     locale_to_url_keys: getLocaleToURLKeys(),
     url_modifier: function(url) { return "/inserted_sha" + url; }
-  });
-  cb();
+  }, cb);
 }
 
 function setupWithoutLocaleToURLKeys(cb) {
   css_generator.setup({
     fonts: getFontConfig()
-  });
-  cb();
+  }, cb);
 }
 
 function testFontConfigContains(test, ua, locale, types, done) {
@@ -143,8 +142,20 @@ exports.get_font_css_no_locale_to_url_keys = nodeunit.testCase({
     testCSSContains(test, "Firefox/4.0", "latin", ["/fonts/OpenSans-Regular-latin.woff"]);
   },
 
-  "en maps to default": function(test) {
-    testCSSContains(test, "Firefox/4.0", "en", ["/fonts/OpenSans-Regular-default.woff"]);
+  "en maps to latin": function(test) {
+    testCSSContains(test, "Firefox/4.0", "en", ["/fonts/OpenSans-Regular-latin.woff"]);
+  },
+
+  "ru maps to cyrillic": function(test) {
+    testCSSContains(test, "Firefox/4.0", "ru", ["/fonts/OpenSans-Regular-cyrillic.woff"]);
+  },
+
+  "el is aliased but maps to default because not available in available fonts": function(test) {
+    testCSSContains(test, "Firefox/4.0", "el", ["/fonts/OpenSans-Regular-default.woff"]);
+  },
+
+  "cz not defined so maps to default": function(test) {
+    testCSSContains(test, "Firefox/4.0", "cz", ["/fonts/OpenSans-Regular-default.woff"]);
   }
 });
 

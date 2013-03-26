@@ -42,23 +42,23 @@ font_config = {
   }
 };
 ```
-Multiple urls can be defined for a single font. This is useful to define
-specific font files for different locale "roots". For example, latin based
-locales can be specified under the "latin" url, russian under
-"cyrillic", and greek under "greek". If multiple urls are defined, `default` *must* be defined. `default` is the default if a locale is not found in the `locale_to_url_keys` table.
+A single font may define multiple, locale specific URLs. For example, latin based locales can be specified under the "latin" url, Russian under
+"cyrillic", and Greek under "greek". If multiple urls are defined, the fallback locale `default` *must* be defined.
+
 `locale_to_url_keys` is an optional object that holds a dictionary of locales to urls. locale_to_url_keys kicks in if a locale cannot be directly found in the url list specified for a font. For example:
 ```
 locale_to_url_keys = {
-  "en":    "latin",   // will match for en, en-US, en-UK, en-CA, ...
-  "es":    "latin",   // will match for es, es-MX, en-AR, en-*
-  "fr"     "latin",
-  "ru":    "cyrillic",
-  "ro":    "cyrillic",
-  "bg":    "cyrillic",
+  "en":    "english",   // will match for en, en-US, en-UK, en-CA, ...
+  "es":    "spanish",   // will match for es, es-MX, en-AR, en-*
+  "fr"     "french",
+  "ru":    "russian",
+  "ro":    "romanian",
+  "bg":    "bulgarian",
   "jp":    "japanese"
 };
 ```
-If an exact match is not found for a specific locale, the locale's root will be used. If a locale's url is not found for a multi-url font, `default` will be used.
+
+If no match is found for a fully specified locale, its root locale will be searched for. If neither is found, a default list of aliases will be checked, first for the specific locale, then for the locale root. The list of aliases is in `lib/aliases.js`. If no match is found, `default` will be used.
 
 3. Call the `setup` function with the configuration objects.
 ```
