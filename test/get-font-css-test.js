@@ -24,8 +24,8 @@ function getLocaleToURLKeys() {
 function setupWithLocaleToURLKeys(cb) {
   css_generator.setup({
     fonts: getFontConfig(),
-    locale_to_url_keys: getLocaleToURLKeys(),
-    url_modifier: function(url) { return "/inserted_sha" + url; }
+    localeToUrlKeys: getLocaleToURLKeys(),
+    urlModifier: function(url) { return "/inserted_sha" + url; }
   }, cb);
 }
 
@@ -135,7 +135,7 @@ function testCSSs(test, UAs, types, index) {
   }
 }
 
-exports.get_font_css_no_locale_to_url_keys = nodeunit.testCase({
+exports.get_font_css_no_localeToUrlKeys = nodeunit.testCase({
   setUp: setupWithoutLocaleToURLKeys,
 
   "latin maps to latin": function(test) {
@@ -154,8 +154,12 @@ exports.get_font_css_no_locale_to_url_keys = nodeunit.testCase({
     testCSSContains(test, "Firefox/4.0", "el", ["/fonts/OpenSans-Regular-default.woff"]);
   },
 
-  "cz not defined so maps to default": function(test) {
-    testCSSContains(test, "Firefox/4.0", "cz", ["/fonts/OpenSans-Regular-default.woff"]);
+  "jp not defined so maps to default": function(test) {
+    testCSSContains(test, "Firefox/4.0", "jp", ["/fonts/OpenSans-Regular-default.woff"]);
+  },
+
+  "cz is defined in font specific localeToUrlKeys to chinese": function(test) {
+    testCSSContains(test, "Firefox/4.0", "cz", ["/fonts/OpenSans-Regular-chinese.woff"]);
   }
 });
 
@@ -200,8 +204,12 @@ exports.get_font_css = nodeunit.testCase({
     testCSSContains(test, "Firefox/4.0", "ru", ["/inserted_sha/fonts/OpenSans-Regular-cyrillic.woff"]);
   },
 
+  "cz defined in font specific localeToUrlKeys takes precedence over definition in generic localeToUrlKeys": function(test) {
+    testCSSContains(test, "Firefox/4.0", "cz", ["/inserted_sha/fonts/OpenSans-Regular-chinese.woff"]);
+  },
+
   "unknown languages default to the default font set": function(test) {
-    testCSSContains(test, "Firefox/4.0", "cz", ["/inserted_sha/fonts/OpenSans-Regular-default.woff"]);
+    testCSSContains(test, "Firefox/4.0", "af", ["/inserted_sha/fonts/OpenSans-Regular-default.woff"]);
   },
 
   "missing font location falls back to default": function(test) {

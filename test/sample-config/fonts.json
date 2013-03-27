@@ -22,6 +22,7 @@
           "pt": "/fonts/OpenSans-Regular-pt.woff",
           "latin": "/fonts/OpenSans-Regular-latin.woff",
           "cyrillic": "/fonts/OpenSans-Regular-cyrillic.woff",
+          "chinese": "/fonts/OpenSans-Regular-chinese.woff",
           "default": "/fonts/OpenSans-Regular-default.woff"
         }
       },
@@ -37,7 +38,11 @@
         "type": "svg",
         "url": "/fonts/OpenSans-Regular.svg"
       }
-      ]
+    ],
+
+    "localeToUrlKeys": {
+      "cz":    "chinese"
+    }
   } 
 }
 

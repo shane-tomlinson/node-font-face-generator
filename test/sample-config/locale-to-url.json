@@ -1,8 +1,7 @@
 {
-  "en":    "latin",
-  "es":    "latin",
   "it-ch": "default",
   "ru":    "cyrillic",
-  "jp":    "japanese"
+  "jp":    "japanese",
+  "cz":     "mandarin"
 }
 

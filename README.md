@@ -8,8 +8,9 @@ const css_generator = require("node-font-face-generator");
 ```
 
 2. Set up your configuration.
-Two configuration items are used for the css_generator, `fonts` and
-`locale_to_url_keys`. `fonts` is an Object that holds a dictionary of fonts.
+Call `.setup` with two paramters, `fonts` and `localeToUrlKeys`
+
+`fonts` is an Object that holds a dictionary of fonts.
 ```
 font_config = {
   "OpenSansRegular": {
@@ -18,10 +19,10 @@ font_config = {
     "fontWeight": "400",
     "formats": [ {
         "type": "local",
-        "url": "Open Sans"
+        "url": "Open Sans"            // TrueType name (for most OSs)
       }, {
         "type": "local",
-        "url": "OpenSans"
+        "url": "Open Sans-Regular"    // PostScript name (for OSX)
       }, {
         "type": "embedded-opentype",
         "url": "/fonts/OpenSans-Regular.eot"
@@ -30,7 +31,8 @@ font_config = {
         "url": {
           "latin": "/fonts/OpenSans-Regular-latin.woff",
           "cyrillic": "/fonts/OpenSans-Regular-cyrillic.woff",
-          "default": "/fonts/OpenSans-Regular-default.woff"
+          "default": "/fonts/OpenSans-Regular-default.woff",
+          "chinese": "/fonts/OpenSans-Regular-chinese.woff",
         }
       }, {
         "type": "truetype",
@@ -38,16 +40,23 @@ font_config = {
           "latin": "/fonts/OpenSans-Regular-latin.ttf",
           "default": "/fonts/OpenSans-Regular-default.ttf"
         }
-      } ]
+      } ],
+    // font specific locale to URL keys. Locales defined here override
+    // the generic localeToUrlKeys passed in as configuration to
+    // .setup.
+    "localeToUrlKeys": {
+      "cz": "chinese"
+    }
   }
 };
 ```
-A single font may define multiple, locale specific URLs. For example, latin based locales can be specified under the "latin" url, Russian under
-"cyrillic", and Greek under "greek". If multiple urls are defined, the fallback locale `default` *must* be defined.
 
-`locale_to_url_keys` is an optional object that holds a dictionary of locales to urls. locale_to_url_keys kicks in if a locale cannot be directly found in the url list specified for a font. For example:
+A font have multiple, locale specific URLs. For example, Latin based locales can be specified under the `latin` url, Russian under `cyrillic`, and Greek under `greek`. If multiple urls are defined, the fallback locale `default` *must* be defined.
+
+`localeToUrlKeys` is an optional object that holds a dictionary of locales to urls. localeToUrlKeys kicks in if a locale cannot be directly found in the url list specified for a font. For example:
+
 ```
-locale_to_url_keys = {
+localeToUrlKeys = {
   "en":    "english",   // will match for en, en-US, en-UK, en-CA, ...
   "es":    "spanish",   // will match for es, es-MX, en-AR, en-*
   "fr"     "french",
@@ -58,13 +67,25 @@ locale_to_url_keys = {
 };
 ```
 
-If no match is found for a fully specified locale, its root locale will be searched for. If neither is found, a default list of aliases will be checked, first for the specific locale, then for the locale root. The list of aliases is in `lib/aliases.js`. If no match is found, `default` will be used.
+`localeToUrlKeys` may be defined generically for all fonts via the `setup` function, or as an alternative, for each individual font. The rules for how a locale matches to a URL are:
+
+* first, look in the list of URLs specified for a font to see if the locale is available.
+* next, look in the list of URLs specified for a font to see if the baseLocale is available.
+* next, look in the font specific localeToUrlKeys to see if the locale is specified.
+* next, look in the font specific localeToUrlKeys to see if the baseLocale is specified.
+* next, look in the generic localeToUrlKeys to see if the locale is specified.
+* next, look in the generic localeToUrlKeys to see if the baseLocale is specified.
+* next, look in DefaultUrlKeys to see if the locale is specified.
+* next, look in DefaultUrlKeys to see if the baseLocale is specified.
+* finally, fall back to default.
+
+`DefaultUrlKeys` are a base set of localeToUrlKeys that are compatible with Google Font Directory's `subset.pl` utility. The list is found in `lib/locale_to_url_keys.js`
 
 3. Call the `setup` function with the configuration objects.
 ```
 css_generator.setup({
   fonts: font_config,
-  locale_to_url_keys: locale_to_url_keys
+  localeToUrlKeys: localeToUrlKeys
 });
 ```
 

@@ -1,0 +1,12 @@
+A list of important changes, newest changes first.
+
+0.1.0
+  * locale_to_url_keys renamed to localeToUrlKeys in options to setup.
+  * url_modifier renamed to urlModifier in options to setup.
+  * Add ability to specify locale specific localeToUrlKeys
+  * Add default localeToUrlKeys specified in lib/locale_to_url_keys.js
+
+0.0.1
+  * Initial release
+
+
