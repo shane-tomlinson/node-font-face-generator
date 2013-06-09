@@ -35,6 +35,14 @@
         }
       },
       {
+        "type": "opentype",
+        "url": {
+          "pt": "/fonts/OpenSans-Regular-pt.otf",
+          "latin": "/fonts/OpenSans-Regular-latin.otf",
+          "default": "/fonts/OpenSans-Regular-default.otf"
+        }
+      },
+      {
         "type": "svg",
         "url": "/fonts/OpenSans-Regular.svg"
       }
