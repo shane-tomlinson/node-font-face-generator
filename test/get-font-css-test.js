@@ -76,7 +76,7 @@ exports.get_font_configs = nodeunit.testCase({
   setUp: setupWithLocaleToURLKeys,
 
   "en/Firefox >= 3.6, Safari >= 5.1, Chrome >= 5.0, IE >= 9.0 Opera >= 11.10 maps to woff/latin": function(test) {
-    var UAs = ["Firefox/3.6", "Version/5.1 Safari/", "Chrome/5.0", "Opera/9.80 Version/11.10", "MSIE 9.0", "MSIE 10.0"];
+    var UAs = ["Firefox/3.6", "Version/5.1 Safari/", "Chrome/5.0", "Opera/9.80 Version/11.10", "MSIE 9.0", "MSIE 10.0", "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv 11.0) like Gecko"];
     var types = ["woff", "local"];
 
     testFontConfigs(test, UAs, types);
