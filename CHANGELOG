@@ -1,5 +1,9 @@
 A list of important changes, newest changes first.
 
+0.1.2
+	* Add support for IE11
+	* Add ability to specify host/CDN
+
 0.1.0
   * locale_to_url_keys renamed to localeToUrlKeys in options to setup.
   * url_modifier renamed to urlModifier in options to setup.
