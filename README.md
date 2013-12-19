@@ -8,7 +8,13 @@ const css_generator = require("node-font-face-generator");
 ```
 
 2. Set up your configuration.
-Call `.setup` with two paramters, `fonts` and `localeToUrlKeys`
+Call `.setup` with configuration.
+
+Possible options:
+  * `fonts`
+  * `localeToUrlKeys`
+  * `urlModifier`
+  * `host`
 
 `fonts` is an Object that holds a dictionary of fonts.
 ```
@@ -80,6 +86,10 @@ localeToUrlKeys = {
 * finally, fall back to default.
 
 `DefaultUrlKeys` are a base set of localeToUrlKeys that are compatible with Google Font Directory's `subset.pl` utility. The list is found in `lib/locale_to_url_keys.js`
+
+`urlModifier` is an optional function that is called to modify each URL. This is useful for caching/cache busting. Function must return a string.
+
+`host` is an optional string used to specify a host where fonts are located. Useful if fonts are located on a CDN.
 
 3. Call the `setup` function with the configuration objects.
 ```
