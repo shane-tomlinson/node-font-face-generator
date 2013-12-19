@@ -21,18 +21,18 @@ function getLocaleToURLKeys() {
   return loadJSON(path.join(__dirname, "sample-config", "locale-to-url.json"));
 }
 
-function setupWithLocaleToURLKeys(cb) {
+function setupWithLocaleToURLKeys(done) {
   css_generator.setup({
     fonts: getFontConfig(),
     localeToUrlKeys: getLocaleToURLKeys(),
     urlModifier: function(url) { return "/inserted_sha" + url; }
-  }, cb);
+  }, done);
 }
 
-function setupWithoutLocaleToURLKeys(cb) {
+function setupWithoutLocaleToURLKeys(done) {
   css_generator.setup({
     fonts: getFontConfig()
-  }, cb);
+  }, done);
 }
 
 function testFontConfigContains(test, ua, locale, types, done) {
@@ -328,4 +328,18 @@ exports.expected_errors = nodeunit.testCase({
   "InvalidFontError for get_font_configs": function(test) {
     testInvalidFont(test, "get_font_configs");
   }
+});
+
+exports.specify_host_for_cdn = nodeunit.testCase({
+  setUp: function(done) {
+    css_generator.setup({
+      fonts: getFontConfig(),
+      host: 'https://cdn.fonthost.org'
+    }, done);
+  },
+
+  "font URLs contain host": function(test) {
+    testCSSContains(test, "Firefox/4.0", "en", ["https://cdn.fonthost.org/fonts/OpenSans-Regular-latin.woff"]);
+  }
+
 });
