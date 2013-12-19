@@ -54,7 +54,7 @@ function testFontConfigContains(test, ua, locale, types, done) {
     var formats = openSansFontConfig.formats;
 
     types.forEach(function(type) {
-      test.ok(searchForType(formats, type) > -1, type + " found in formats");
+      test.ok(searchForType(formats, type) > -1, type + " found in formats for ua: " + ua);
     });
 
     done();

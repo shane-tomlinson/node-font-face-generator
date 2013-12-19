@@ -1,8 +1,12 @@
 {
   "Author": "Shane Tomlinson <shane@shanetomlinson.com> (https://shanetomlinson.com)",
   "name": "node-font-face-generator",
-  "description": "Generate language/browser dependent @font-face CSS declarations" ,
-  "keywords": ["font", "font-face", "CSS"],
+  "description": "Generate language/browser dependent @font-face CSS declarations",
+  "keywords": [
+    "font",
+    "font-face",
+    "CSS"
+  ],
   "homepage": "https://github.com/shane-tomlinson/node-font-face-generator",
   "repository": {
     "type": "git",
@@ -12,13 +16,13 @@
     "url": "https://github.com/shane-tomlinson/node-font-face-generator/issues"
   },
   "main": "index",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "engines": {
     "node": ">= 0.4.7"
   },
   "dependencies": {
-    "ejs": ">=0.6.1",
-    "ua-parser": "0.2.4"
+    "ejs": "0.8.5",
+    "useragent": "2.0.7"
   },
   "devDependencies": {
     "nodeunit": ">=0.6.4"
