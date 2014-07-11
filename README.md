@@ -46,6 +46,13 @@ font_config = {
           "latin": "/fonts/OpenSans-Regular-latin.ttf",
           "default": "/fonts/OpenSans-Regular-default.ttf"
         }
+      }, {
+        "type": "svg",
+        "url": {
+          "latin": "/fonts/OpenSans-Regular-latin.svg",
+          "default": "/fonts/OpenSans-Regular-default.svg"
+        },
+        "id": "opensans-regular"
       } ],
     // font specific locale to URL keys. Locales defined here override
     // the generic localeToUrlKeys passed in as configuration to
@@ -152,7 +159,6 @@ var css = css_generator.get_font_css({
 * stomlinson@mozilla.com
 * set117@yahoo.com
 * https://shanetomlinson.com
-* http://github.com/stomlinson
 * http://github.com/shane-tomlinson
 * @shane_tomlinson
 

@@ -1,0 +1,22 @@
+{
+  "name": "node-font-face-generator",
+  "version": "0.1.4",
+  "dependencies": {
+    "ejs": {
+      "version": "1.0.0",
+      "from": "ejs@1.0.0",
+      "resolved": "https://registry.npmjs.org/ejs/-/ejs-1.0.0.tgz"
+    },
+    "useragent": {
+      "version": "2.0.9",
+      "from": "useragent@2.0.9",
+      "resolved": "https://registry.npmjs.org/useragent/-/useragent-2.0.9.tgz",
+      "dependencies": {
+        "lru-cache": {
+          "version": "2.2.4",
+          "from": "lru-cache@2.2.x"
+        }
+      }
+    }
+  }
+}

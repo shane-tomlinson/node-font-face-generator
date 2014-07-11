@@ -44,13 +44,14 @@
       },
       {
         "type": "svg",
-        "url": "/fonts/OpenSans-Regular.svg"
+        "url": "/fonts/OpenSans-Regular.svg",
+        "id": "opensans-regular"
       }
     ],
 
     "localeToUrlKeys": {
       "cz":    "chinese"
     }
-  } 
+  }
 }
 

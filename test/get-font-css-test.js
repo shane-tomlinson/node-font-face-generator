@@ -247,7 +247,7 @@ exports.get_font_css = nodeunit.testCase({
         "Chrome/18.0 Mobile",
         "Opera/9.0",
       ];
-    var types = [ "/inserted_sha/fonts/OpenSans-Regular.svg" ];
+    var types = [ "/inserted_sha/fonts/OpenSans-Regular.svg#opensans-regular" ];
     testCSSs(test, UAs, types);
   },
 
@@ -258,7 +258,7 @@ exports.get_font_css = nodeunit.testCase({
                   "/inserted_sha/fonts/OpenSans-Regular-latin.otf",
                   "/inserted_sha/fonts/OpenSans-Regular.eot",
                   "/inserted_sha/fonts/OpenSans-Regular-latin.woff",
-                  "/inserted_sha/fonts/OpenSans-Regular.svg"
+                  "/inserted_sha/fonts/OpenSans-Regular.svg#opensans-regular"
                 ];
     testCSSs(test, UAs, types);
   }
