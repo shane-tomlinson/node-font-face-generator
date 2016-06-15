@@ -54,7 +54,7 @@ function testFontConfigContains(test, ua, locale, types, done) {
     var formats = openSansFontConfig.formats;
 
     types.forEach(function(type) {
-      test.ok(searchForType(formats, type) > -1, type + " found in formats for ua: " + ua);
+      test.ok(searchForType(formats, type) > -1, type + " not found in formats for ua: " + ua);
     });
 
     done();
@@ -75,30 +75,45 @@ function testFontConfigs(test, UAs, types) {
 exports.get_font_configs = nodeunit.testCase({
   setUp: setupWithLocaleToURLKeys,
 
-  "en/Firefox >= 3.6, Safari >= 5.1, Chrome >= 5.0, Chrome Mobile >= 18.0, IE >= 9.0, Opera >= 11.10 maps to woff/latin": function(test) {
+  "woff2": function(test) {
+    var UAs = ["Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:39.0) Gecko/20100101 Firefox/39.0", "Chrome/36.0", "Opera/9.80 Version/23.0"];
+    var types = ["woff2"];
+
+    testFontConfigs(test, UAs, types);
+  },
+
+  "woff": function(test) {
     var UAs = ["Firefox/3.6", "Version/5.1 Safari/", "Chrome/5.0", "Chrome/18.0 Mobile", "Opera/9.80 Version/11.10", "MSIE 9.0", "MSIE 10.0", "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv 11.0) like Gecko"];
-    var types = ["woff", "local"];
+    var types = ["woff"];
 
     testFontConfigs(test, UAs, types);
   },
 
-  "en/MSIE 8.0, MSIE 9.0, map to embedded-opentype, local/latin": function(test) {
+  "embedded-opentype": function(test) {
     var UAs = ["MSIE 8.0", "MSIE 9.0"];
-    var types = ["embedded-opentype", "local"];
+    var types = ["embedded-opentype"];
 
     testFontConfigs(test, UAs, types);
   },
 
-  "en/iOS, Safari >= 3.1, Opera >= 10.0, Firefox >= 3.5, Chrome >= 4, Chrome Mobile >= 18, IE >= 9.0 maps to truetype/latin": function(test) {
-    var UAs = ["iPhone OS 2_0 Version/2.0", "Version/3.1 Safari/", "Opera/9.80 Version/10.0", "Firefox/3.5", "Chrome/4.0", "Chrome/18.0 Mobile", "MSIE 9.0"];
-    var types = ["truetype"];
+  "truetype & local": function(test) {
+    var UAs = ["Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20", "Mozilla/5.0 (Windows; U; Windows NT 5.2; ru-RU) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.2 Safari/525.13.3", "Opera/9.80 Version/10.0", "Firefox/3.5", "Chrome/4.0", "Chrome/18.0 Mobile", "MSIE 9.0"];
+    // local fonts are truetype fonts.
+    var types = ["truetype", "local"];
 
     testFontConfigs(test, UAs, types);
   },
 
-  "en/all maps to all fonts": function(test) {
+  "opentype": function(test) {
+    var UAs = ["Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20", "Mozilla/5.0 (Windows; U; Windows NT 5.2; ru-RU) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.2 Safari/525.13.3", "Opera/9.80 Version/10.0", "Firefox/3.5", "Chrome/4.0", "Chrome/18.0 Mobile", "MSIE 9.0"];
+    var types = ["opentype"];
+
+    testFontConfigs(test, UAs, types);
+  },
+
+  "all fonts": function(test) {
     var UAs = ["all"];
-    var types = ["local", "truetype", "opentype", "embedded-opentype", "woff"];
+    var types = ["local", "truetype", "opentype", "embedded-opentype", "woff", "woff2"];
 
     testFontConfigs(test, UAs, types);
   }
@@ -217,31 +232,41 @@ exports.get_font_css = nodeunit.testCase({
     testCSSContains(test, "Firefox/4.0", "jp", ["/inserted_sha/fonts/OpenSans-Regular-default.woff"]);
   },
 
-  "Firefox >= 3.6, Chrome > 5.0, Chrome Mobile > 18.0, Safari > 5.1, Opera >= 11.10 all support local and .woff files": function(test) {
-    var UAs = ["Firefox/4.0", "Version/5.1 Safari/", "Chrome/5.0", "Chrome/18.0 Mobile", "Opera/9.80 Version/11.10"];
-    var types = ["local", "/inserted_sha/fonts/OpenSans-Regular-latin.woff"];
+  "woff2": function(test) {
+    var UAs = ["Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:39.0) Gecko/20100101 Firefox/39.0", "Chrome/36.0", "Opera/9.80 Version/23.0"];
+    var types = ["/inserted_sha/fonts/OpenSans-Regular-latin.woff2"];
 
     testCSSs(test, UAs, types);
   },
 
-  "IE supports local and eot files": function(test) {
+  "woff": function(test) {
+    var UAs = ["Firefox/4.0", "Version/5.1 Safari/", "Chrome/5.0", "Chrome/18.0 Mobile", "Opera/9.80 Version/11.10"];
+    var types = ["/inserted_sha/fonts/OpenSans-Regular-latin.woff"];
+
+    testCSSs(test, UAs, types);
+  },
+
+  "eot": function(test) {
     var UAs = ["MSIE 8.0", "MSIE 9.0"];
     var types = ["local", "/inserted_sha/fonts/OpenSans-Regular.eot"];
     testCSSs(test, UAs, types);
   },
 
-  "iOS, Safari < 5.1, IE >= 9.0 supports local, otf and ttf files": function(test) {
-    var UAs = ["iPhone OS 2_0 Version/2.0", "Version/5.0 Safari/", "MSIE 9.0"];
-    var types = ["local",
-                 "/inserted_sha/fonts/OpenSans-Regular-latin.ttf",
-                 "/inserted_sha/fonts/OpenSans-Regular-latin.otf"
-                 ];
+  "ttf": function(test) {
+    var UAs = ["Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20", "Version/5.0 Safari/", "MSIE 9.0"];
+    var types = ["/inserted_sha/fonts/OpenSans-Regular-latin.ttf"];
     testCSSs(test, UAs, types);
   },
 
-  "iOS >= 3.2, Safari >= 3.2, Chrome >= 4, Chrome Mobile >= 18, Opera >= 9 support svg": function(test) {
+  "otf": function(test) {
+    var UAs = ["Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20", "Version/5.0 Safari/", "MSIE 9.0"];
+    var types = ["/inserted_sha/fonts/OpenSans-Regular-latin.otf"];
+    testCSSs(test, UAs, types);
+  },
+
+  "svg": function(test) {
     var UAs = [
-        "iPhone OS 2_0 Version/3.2",
+        "Mozilla/5.0 (iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10",
         "Version/3.2 Safari/",
         "Chrome/4.0",
         "Chrome/18.0 Mobile",
@@ -251,13 +276,14 @@ exports.get_font_css = nodeunit.testCase({
     testCSSs(test, UAs, types);
   },
 
-  "all supports local, otf, ttf, eot, woff, and svg files": function(test) {
+  "all supports local, otf, ttf, eot, woff, woff2, and svg files": function(test) {
     var UAs = ["all"];
     var types = [ "local",
                   "/inserted_sha/fonts/OpenSans-Regular-latin.ttf",
                   "/inserted_sha/fonts/OpenSans-Regular-latin.otf",
                   "/inserted_sha/fonts/OpenSans-Regular.eot",
                   "/inserted_sha/fonts/OpenSans-Regular-latin.woff",
+                  "/inserted_sha/fonts/OpenSans-Regular-latin.woff2",
                   "/inserted_sha/fonts/OpenSans-Regular.svg#opensans-regular"
                 ];
     testCSSs(test, UAs, types);
@@ -342,5 +368,4 @@ exports.specify_host_for_cdn = nodeunit.testCase({
   "font URLs contain host": function(test) {
     testCSSContains(test, "Firefox/4.0", "en", ["https://cdn.fonthost.org/fonts/OpenSans-Regular-latin.woff"]);
   }
-
 });
