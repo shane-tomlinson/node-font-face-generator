@@ -1,5 +1,8 @@
 A list of important changes, newest changes first.
 
+0.1.6
+  * Add support for woff2 and opentype
+
 0.1.5
 	* Update EJS and user-agent.
 	* Add support for an svg `id` field to append to URL.
