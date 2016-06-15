@@ -27,6 +27,16 @@
         }
       },
       {
+        "type": "woff2",
+        "url": {
+          "pt": "/fonts/OpenSans-Regular-pt.woff2",
+          "latin": "/fonts/OpenSans-Regular-latin.woff2",
+          "cyrillic": "/fonts/OpenSans-Regular-cyrillic.woff2",
+          "chinese": "/fonts/OpenSans-Regular-chinese.woff2",
+          "default": "/fonts/OpenSans-Regular-default.woff2"
+        }
+      },
+      {
         "type": "truetype",
         "url": {
           "pt": "/fonts/OpenSans-Regular-pt.ttf",
