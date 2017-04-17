@@ -1,43 +1,55 @@
 {
   "name": "node-font-face-generator",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "dependencies": {
     "ejs": {
       "version": "1.0.0",
-      "from": "ejs@1.0.0",
+      "from": "https://registry.npmjs.org/ejs/-/ejs-1.0.0.tgz",
       "resolved": "https://registry.npmjs.org/ejs/-/ejs-1.0.0.tgz"
     },
     "node-uap": {
       "version": "0.0.3",
-      "from": "node-uap@0.0.3",
+      "from": "https://registry.npmjs.org/node-uap/-/node-uap-0.0.3.tgz",
       "resolved": "https://registry.npmjs.org/node-uap/-/node-uap-0.0.3.tgz",
       "dependencies": {
         "uap-core": {
           "version": "0.5.0",
-          "from": "git://github.com/ua-parser/uap-core.git",
+          "from": "git://github.com/ua-parser/uap-core.git#49b141ffe86d5138c332f733d6b2007675bbeb43",
           "resolved": "git://github.com/ua-parser/uap-core.git#49b141ffe86d5138c332f733d6b2007675bbeb43"
         },
         "uap-ref-impl": {
           "version": "0.2.0",
-          "from": "uap-ref-impl@0.2.0",
+          "from": "https://registry.npmjs.org/uap-ref-impl/-/uap-ref-impl-0.2.0.tgz",
           "resolved": "https://registry.npmjs.org/uap-ref-impl/-/uap-ref-impl-0.2.0.tgz"
         },
         "yamlparser": {
           "version": "0.0.2",
-          "from": "yamlparser@0.0.2",
+          "from": "https://registry.npmjs.org/yamlparser/-/yamlparser-0.0.2.tgz",
           "resolved": "https://registry.npmjs.org/yamlparser/-/yamlparser-0.0.2.tgz"
         }
       }
     },
     "useragent": {
-      "version": "2.1.9",
-      "from": "useragent@2.1.9",
-      "resolved": "https://registry.npmjs.org/useragent/-/useragent-2.1.9.tgz",
+      "version": "2.1.13",
+      "from": "useragent@2.1.13",
+      "resolved": "https://registry.npmjs.org/useragent/-/useragent-2.1.13.tgz",
       "dependencies": {
         "lru-cache": {
           "version": "2.2.4",
           "from": "lru-cache@>=2.2.0 <2.3.0",
           "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.2.4.tgz"
+        },
+        "tmp": {
+          "version": "0.0.31",
+          "from": "tmp@>=0.0.0 <0.1.0",
+          "resolved": "https://registry.npmjs.org/tmp/-/tmp-0.0.31.tgz",
+          "dependencies": {
+            "os-tmpdir": {
+              "version": "1.0.2",
+              "from": "os-tmpdir@>=1.0.1 <1.1.0",
+              "resolved": "https://registry.npmjs.org/os-tmpdir/-/os-tmpdir-1.0.2.tgz"
+            }
+          }
         }
       }
     }

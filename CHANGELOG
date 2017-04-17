@@ -1,5 +1,7 @@
 A list of important changes, newest changes first.
 
+0.1.8
+  * update shrinkwrap, bug fix
 0.1.7
   * Update to useragent 2.1.13
 
