@@ -1,12 +1,15 @@
 A list of important changes, newest changes first.
 
+0.1.7
+  * Update to useragent 2.1.13
+
 0.1.6
   * Add support for woff2 and opentype
 
 0.1.5
-	* Update EJS and user-agent.
-	* Add support for an svg `id` field to append to URL.
-	* Add npm-shrinkwrap.json
+  * Update EJS and user-agent.
+  * Add support for an svg `id` field to append to URL.
+  * Add npm-shrinkwrap.json
 
 0.1.4
   * Append `?#iefix` for embedded-opentype fonts
@@ -15,8 +18,8 @@ A list of important changes, newest changes first.
   * Add support for Chrome Mobile - thanks Konrad Mohrfeldt (@kmohrf)
 
 0.1.2
-	* Add support for IE11
-	* Add ability to specify host/CDN
+  * Add support for IE11
+  * Add ability to specify host/CDN
 
 0.1.0
   * locale_to_url_keys renamed to localeToUrlKeys in options to setup.
