@@ -1,6 +1,6 @@
 {
   "name": "node-font-face-generator",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "dependencies": {
     "ejs": {
       "version": "1.0.0",
@@ -15,7 +15,7 @@
         "uap-core": {
           "version": "0.5.0",
           "from": "git://github.com/ua-parser/uap-core.git",
-          "resolved": "git://github.com/ua-parser/uap-core.git#49b141ffe86d5138c332f733d6b2007675bbeb43"
+          "resolved": "git://github.com/ua-parser/uap-core.git#5dceb896913fc953d52881bf77e6ed64fd1b4054"
         },
         "uap-ref-impl": {
           "version": "0.2.0",
@@ -26,18 +26,6 @@
           "version": "0.0.2",
           "from": "yamlparser@0.0.2",
           "resolved": "https://registry.npmjs.org/yamlparser/-/yamlparser-0.0.2.tgz"
-        }
-      }
-    },
-    "useragent": {
-      "version": "2.1.9",
-      "from": "useragent@2.1.9",
-      "resolved": "https://registry.npmjs.org/useragent/-/useragent-2.1.9.tgz",
-      "dependencies": {
-        "lru-cache": {
-          "version": "2.2.4",
-          "from": "lru-cache@>=2.2.0 <2.3.0",
-          "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.2.4.tgz"
         }
       }
     }
