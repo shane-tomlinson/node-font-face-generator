@@ -23,8 +23,7 @@
   },
   "dependencies": {
     "ejs": "1.0.0",
-    "node-uap": "0.0.3",
-    "useragent": "2.1.13"
+    "node-uap": "0.0.3"
   },
   "devDependencies": {
     "nodeunit": ">=0.6.4"
